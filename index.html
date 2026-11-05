@@ -162,6 +162,11 @@ main{position:relative;width:100%;overflow-x:hidden}
   letter-spacing:-0.01em;color:var(--muted);text-align:center;padding:1rem}
 .liq.bare .veil,.liq.bare .glow,.liq.bare .vig,.liq.bare .ph{display:none}
 
+
+.liq .slides{position:absolute;inset:0}
+.liq .slides img{opacity:0;transition:opacity 900ms ease;position:absolute;inset:0;
+  width:100%;height:100%;object-fit:cover;object-position:top center}
+.liq .slides img.on{opacity:1}
 /* ---------- marquee ---------- */
 .marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
   padding-top:2rem;padding-bottom:2rem}
@@ -421,7 +426,7 @@ section,footer{padding-left:var(--gutter);padding-right:var(--gutter)}
     </div>
     <ul class="works" id="works">
       <li class="fade-up"><article class="group">
-        <figure class="liq" role="img" aria-label="Salo-sa-Antipolo"><span class="ph">Salo-sa-Antipolo</span><span class="veil"></span><span class="glow"></span><span class="vig"></span></figure>
+        <figure class="liq" role="img" aria-label="Salo-sa-Antipolo"><div class="slides" data-slides="salo"></div><span class="veil"></span><span class="glow"></span><span class="vig"></span></figure>
         <div class="vrow">
           <div><h3 class="acc-spring">Salo-sa-Antipolo</h3>
             <p>A restaurant POS system built as a group academic project — I worked as the frontend developer.</p></div>
@@ -430,7 +435,7 @@ section,footer{padding-left:var(--gutter);padding-right:var(--gutter)}
         <p class="cat">React · Firebase · Tailwind</p>
       </article></li>
       <li class="fade-up"><article class="group">
-        <figure class="liq" role="img" aria-label="Travel-Tie"><span class="ph">Travel-Tie</span><span class="veil"></span><span class="glow"></span><span class="vig"></span></figure>
+        <figure class="liq" role="img" aria-label="Travel-Tie"><div class="slides" data-slides="travel"></div><span class="veil"></span><span class="glow"></span><span class="vig"></span></figure>
         <div class="vrow">
           <div><h3 class="acc-spring">Travel-Tie</h3>
             <p>A travel planning and itinerary app built as a group academic project — I worked as a full stack developer.</p></div>
@@ -439,7 +444,7 @@ section,footer{padding-left:var(--gutter);padding-right:var(--gutter)}
         <p class="cat">React · Tailwind · REST API</p>
       </article></li>
       <li class="fade-up"><article class="group">
-        <figure class="liq" role="img" aria-label="Liham"><span class="ph">Liham</span><span class="veil"></span><span class="glow"></span><span class="vig"></span></figure>
+        <figure class="liq" role="img" aria-label="Liham"><div class="slides" data-slides="liham"></div><span class="veil"></span><span class="glow"></span><span class="vig"></span></figure>
         <div class="vrow">
           <div><h3 class="acc-spring">Liham</h3>
             <p>A quiet digital time capsule — write a letter, pick a delivery date, and it stays sealed until then.</p></div>
@@ -448,16 +453,16 @@ section,footer{padding-left:var(--gutter);padding-right:var(--gutter)}
         <p class="cat">React · Firebase · CSS</p>
       </article></li>
       <li class="fade-up"><article class="group">
-        <figure class="liq" role="img" aria-label="KuryenteWatch"><span class="ph">KuryenteWatch</span><span class="veil"></span><span class="glow"></span><span class="vig"></span></figure>
+        <figure class="liq" role="img" aria-label="KuryenteWatch"><div class="slides" data-slides="kuryente"></div><span class="veil"></span><span class="glow"></span><span class="vig"></span></figure>
         <div class="vrow">
-          <div><h3 class="acc-spring">KuryenteWatch</h3>
+          <div><h3 class="acc-spring"><a href="https://dist-web-ddfpdfbm.devinapps.com/" target="_blank" rel="noreferrer noopener">KuryenteWatch ↗</a></h3>
             <p>A local-first household electricity tracker PWA built for the AppBuilder Hackathon, with an optional local AI energy assistant.</p></div>
           <div class="vright"><p class="year">2025</p><p class="outcome">Hackathon</p></div>
         </div>
         <p class="cat">React · Express · SQLite · PWA</p>
       </article></li>
       <li class="fade-up"><article class="group">
-        <figure class="liq" role="img" aria-label="URStamp"><span class="ph">URStamp</span><span class="veil"></span><span class="glow"></span><span class="vig"></span></figure>
+        <figure class="liq" role="img" aria-label="URStamp"><div class="slides" data-slides="urstamp"></div><span class="veil"></span><span class="glow"></span><span class="vig"></span></figure>
         <div class="vrow">
           <div><h3 class="acc-spring"><a href="https://urstamp-prod.cruzjack689.workers.dev/" target="_blank" rel="noreferrer noopener">URStamp ↗</a></h3>
             <p>The University of Rizal System's digital event stamp system — students sign in, show their QR code, and collect stamps for attending campus events.</p></div>
@@ -585,6 +590,11 @@ const VOICES = [
     name:"Diosa Oliver", role:"President · Rotaract East Rizal" },
 ];
 
+
+.liq .slides{position:absolute;inset:0}
+.liq .slides img{opacity:0;transition:opacity 900ms ease;position:absolute;inset:0;
+  width:100%;height:100%;object-fit:cover;object-position:top center}
+.liq .slides img.on{opacity:1}
 /* ---------- marquee ---------- */
 const track = document.getElementById("marqueeTrack");
 const mk = () => {
@@ -736,6 +746,29 @@ burger.addEventListener("click",()=>{
   const open = !mmenu.classList.contains("open");
   burger.classList.toggle("open",open); mmenu.classList.toggle("open",open);
   burger.setAttribute("aria-expanded",open);
+});
+
+/* ---------- work card slideshows ---------- */
+const SLIDES = { urstamp:2, kuryente:2, salo:2, travel:2, liham:2 };
+document.querySelectorAll(".slides").forEach((box, bi)=>{
+  const slug = box.dataset.slides;
+  const n = SLIDES[slug] || 0;
+  const imgs = [];
+  for(let i=1;i<=n;i++){
+    const im = document.createElement("img");
+    im.src = `shots/${slug}-${i}.webp`;
+    im.alt = "";
+    im.loading = "lazy";
+    if(i===1) im.classList.add("on");
+    box.appendChild(im); imgs.push(im);
+  }
+  if(n<2) return;
+  let cur = 0;
+  setInterval(()=>{
+    imgs[cur].classList.remove("on");
+    cur = (cur+1)%n;
+    imgs[cur].classList.add("on");
+  }, 3200 + bi*600);
 });
 
 document.getElementById("yr").textContent = new Date().getFullYear();
