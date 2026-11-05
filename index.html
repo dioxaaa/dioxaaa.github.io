@@ -544,7 +544,19 @@ section,footer{padding-left:var(--gutter);padding-right:var(--gutter)}
 { "imports": { "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.3.19/dist/lenis.mjs" } }
 </script>
 <script type="module">
-import Lenis from "lenis";
+/* ---------- lenis (with CDN fallback) ---------- */
+let lenis = null;
+try {
+  const mod = await import("lenis");
+  lenis = new mod.default({ smoothWheel: true });
+  window.lenis = lenis;
+  function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
+} catch(e) {
+  // smooth scroll unavailable (offline/blocked CDN) — native scroll still works
+}
+const stopScroll = () => lenis ? lenis.stop() : null;
+const startScroll = () => lenis ? lenis.start() : null;
 
 /* ---------- adaptive grid (>1920 scale-up) ---------- */
 const FONT_BASE = 16, BASE_W = 1920, COEF = 0.6666;
@@ -571,7 +583,8 @@ document.querySelectorAll(".nav-anchor").forEach(a=>{
     if(!el) return;
     e.preventDefault();
     closeMenu();
-    lenis.scrollTo(el);
+    if (lenis) lenis.scrollTo(el);
+    else el.scrollIntoView({ behavior: "smooth" });
   });
 });
 
@@ -663,7 +676,7 @@ heroName.querySelectorAll(".line>span").forEach(lineSpan=>{
 const REVEAL_DELAY = 2500;
 const pre = document.getElementById("preloader");
 const countEl = pre.querySelector(".count");
-lenis.stop(); window.scrollTo(0,0);
+stopScroll(); window.scrollTo(0,0);
 const t0 = performance.now();
 (function count(t){
   const p = Math.min(1,(t-t0)/2000);
@@ -674,7 +687,7 @@ const t0 = performance.now();
     setTimeout(()=>{
       pre.classList.add("wipe");
       setTimeout(()=>{
-        lenis.start();
+        startScroll();
         pre.style.pointerEvents="none";
         pre.setAttribute("aria-hidden","true");
       },700);
